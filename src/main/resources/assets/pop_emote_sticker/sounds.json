@@ -1,0 +1,10 @@
+{
+  "emote_sound": {
+    "sounds": [
+      {
+        "name": "pop_emote_sticker:emote_sound",
+        "stream": false
+      }
+    ]
+  }
+}
