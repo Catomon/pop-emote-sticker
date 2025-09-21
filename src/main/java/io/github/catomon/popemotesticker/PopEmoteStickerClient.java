@@ -1,5 +1,6 @@
 package io.github.catomon.popemotesticker;
 
+import io.github.catomon.popemotesticker.client.EmoteClientManager;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -25,7 +26,9 @@ public class PopEmoteStickerClient {
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
         // Some client setup code
-        PopEmoteSticker.LOGGER.info("HELLO FROM CLIENT SETUP");
-        PopEmoteSticker.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+//        PopEmoteSticker.LOGGER.info("HELLO FROM CLIENT SETUP");
+//        PopEmoteSticker.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+
+        EmoteClientManager.getEmotePackFolder().toFile().mkdirs();
     }
 }

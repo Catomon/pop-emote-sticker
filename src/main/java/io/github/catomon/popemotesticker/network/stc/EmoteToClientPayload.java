@@ -1,4 +1,4 @@
-package io.github.catomon.popemotesticker.network;
+package io.github.catomon.popemotesticker.network.stc;
 
 import io.github.catomon.popemotesticker.PopEmoteSticker;
 import io.github.catomon.popemotesticker.client.EmoteRenderer;

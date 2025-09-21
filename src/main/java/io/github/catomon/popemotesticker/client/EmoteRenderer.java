@@ -1,5 +1,6 @@
 package io.github.catomon.popemotesticker.client;
 
+import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -7,6 +8,7 @@ import io.github.catomon.popemotesticker.PopEmoteSticker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -16,23 +18,14 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderPlayerEvent;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 @EventBusSubscriber(value = Dist.CLIENT)
 public class EmoteRenderer {
-    public static final ResourceLocation[] EMOTE_TEXTURES = new ResourceLocation[]{
-            ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "textures/emotes/emote1.png"),
-            ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "textures/emotes/emote2.png"),
-            ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "textures/emotes/emote3.png"),
-            ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "textures/emotes/emote4.png"),
-            ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "textures/emotes/emote5.png"),
-            ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "textures/emotes/emote6.png"),
-            ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "textures/emotes/emote7.png"),
-            ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "textures/emotes/emote8.png")
-    };
-
     private static final int TICKS_FADE_IN = 5;
     private static final int TICKS_STATIC = 40;
     private static final int TICKS_FADE_OUT = 5;
@@ -40,35 +33,81 @@ public class EmoteRenderer {
 
     private static final float BASE_SIZE = 0.65f;
 
+    // Track active emotes on players with age for fade logic
     private static final Map<UUID, EmoteData> activeEmotes = new HashMap<>();
 
     private static class EmoteData {
         final int emoteId;
+        final DynamicTexture texture; // DynamicTexture created from byte[] data
         int ageTicks = 0;
 
-        EmoteData(int emoteId) {
+        EmoteData(int emoteId, DynamicTexture texture) {
             this.emoteId = emoteId;
+            this.texture = texture;
+        }
+
+        void close() {
+            texture.close(); // Free texture resource when no longer needed
         }
     }
 
     public static void showEmoteOnPlayer(UUID playerUUID, int emoteId) {
-        activeEmotes.put(playerUUID, new EmoteData(emoteId));
+        Map<Integer, byte[]> emotes;
+        UUID localUUID = Minecraft.getInstance().player != null ? Minecraft.getInstance().player.getUUID() : null;
+
+        if (localUUID != null && localUUID.equals(playerUUID)) {
+            // Use local player emote pack (with default fallbacks merged)
+            emotes = EmoteClientManager.getLocalEmotePack();
+        } else {
+            // Use cached network emote pack or empty map
+            emotes = EmoteClientManager.getPlayerEmotePack(playerUUID);
+        }
+
+        byte[] imageData = emotes.get(emoteId);
+
+        // If emote data missing in player pack, fallback to default cached emotes
+        if (imageData == null || imageData.length == 0) {
+            Map<Integer, byte[]> defaultEmotes = EmoteClientManager.loadDefaultEmotesAsBytes();
+            if (defaultEmotes.containsKey(emoteId)) {
+                imageData = defaultEmotes.get(emoteId);
+            } else {
+                // No emote found, abort rendering
+                return;
+            }
+        }
+
+        NativeImage nativeImage;
+        try {
+            nativeImage = NativeImage.read(new ByteArrayInputStream(imageData));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        DynamicTexture texture = new DynamicTexture(nativeImage);
+
+        EmoteData existing = activeEmotes.put(playerUUID, new EmoteData(emoteId, texture));
+        if (existing != null) {
+            existing.close();
+        }
     }
 
-    // Increment ageTicks once per game tick
+    // Tick updates fade timing and removes old emotes
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         var iterator = activeEmotes.entrySet().iterator();
         while (iterator.hasNext()) {
-            Map.Entry<UUID, EmoteData> entry = iterator.next();
+            var entry = iterator.next();
             EmoteData emoteData = entry.getValue();
             emoteData.ageTicks++;
             if (emoteData.ageTicks >= TOTAL_TICKS) {
+                emoteData.close();
                 iterator.remove();
             }
         }
     }
 
+    // Render emote above players with fade-in/out and scaling animations
     @SubscribeEvent
     public static void onPlayerRender(RenderPlayerEvent.Post event) {
         Player player = event.getEntity();
@@ -78,7 +117,8 @@ public class EmoteRenderer {
             return;
 
         EmoteData emoteData = activeEmotes.get(playerUUID);
-        ResourceLocation emoteTexture = EMOTE_TEXTURES[emoteData.emoteId];
+        DynamicTexture texture = emoteData.texture;
+        ResourceLocation emoteResource = Minecraft.getInstance().getTextureManager().register("emote_" + playerUUID, texture);
 
         PoseStack poseStack = event.getPoseStack();
 
@@ -97,30 +137,25 @@ public class EmoteRenderer {
             alpha = 1f - progress;
             scale = 1f - progress;
         } else {
-            // This case is now handled in tick event, but kept for safety
-            activeEmotes.remove(playerUUID);
             return;
         }
 
         poseStack.pushPose();
 
-        // Above player head
         poseStack.translate(0, player.getBbHeight() + 0.5, 0);
 
-        // Face camera
         var camera = Minecraft.getInstance().getEntityRenderDispatcher().camera;
         poseStack.mulPose(camera.rotation());
 
-        // Scale and flip vertically for correct orientation
-        poseStack.scale(-scale, scale, scale);
+        poseStack.scale(scale, scale, scale);
 
         Minecraft mc = Minecraft.getInstance();
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
-        mc.getTextureManager().bindForSetup(emoteTexture);
-        VertexConsumer vertexBuilder = mc.renderBuffers().bufferSource().getBuffer(RenderType.entityTranslucent(emoteTexture));
+        mc.getTextureManager().bindForSetup(emoteResource);
+        VertexConsumer vertexBuilder = mc.renderBuffers().bufferSource().getBuffer(RenderType.entityTranslucent(emoteResource));
 
         float size = BASE_SIZE / 2f;
 
@@ -152,7 +187,7 @@ public class EmoteRenderer {
                 .setLight(LightTexture.FULL_BRIGHT)
                 .setNormal(0f, 1f, 0f);
 
-        mc.renderBuffers().bufferSource().endBatch(RenderType.entityTranslucent(emoteTexture));
+        mc.renderBuffers().bufferSource().endBatch(RenderType.entityTranslucent(emoteResource));
 
         RenderSystem.disableBlend();
 
