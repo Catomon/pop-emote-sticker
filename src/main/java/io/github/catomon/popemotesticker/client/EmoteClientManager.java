@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -55,11 +56,16 @@ public class EmoteClientManager {
         Map<Integer, byte[]> emotesMap = new HashMap<>();
         try {
             Path baseFolder = getEmotePackFolder();
-            for (int i = 1; i <= 8; i++) {
-                Path emotePath = baseFolder.resolve("emote" + i + ".png");
-                if (Files.exists(emotePath)) {
-                    byte[] imageBytes = Files.readAllBytes(emotePath);
-                    emotesMap.put(i - 1, imageBytes);
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(baseFolder, "*.png")) {
+                int index = 0;
+                for (Path entry : stream) {
+                    if (index >= 8) break;
+                    try {
+                        byte[] imageBytes = Files.readAllBytes(entry);
+                        emotesMap.put(index++, imageBytes);
+                    } catch (IOException e) {
+                        System.err.println("Failed to load emote image " + entry + ": " + e.getMessage());
+                    }
                 }
             }
         } catch (IOException e) {

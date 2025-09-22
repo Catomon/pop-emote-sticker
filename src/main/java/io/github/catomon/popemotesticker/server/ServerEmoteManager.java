@@ -1,7 +1,5 @@
 package io.github.catomon.popemotesticker.server;
 
-import io.github.catomon.popemotesticker.network.stc.EmotePackToClientPayload;
-
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,23 +23,14 @@ public class ServerEmoteManager {
         return playerEmotePacks.getOrDefault(playerUUID, Map.of());
     }
 
+    public static Map<UUID, Map<Integer, byte[]>> getAllPlayerEmotePacks() {
+        return playerEmotePacks;
+    }
+
     /**
      * Remove player's emote pack on track when player logs out.
      */
     public static void removePlayerEmotePack(UUID playerUUID) {
         playerEmotePacks.remove(playerUUID);
-    }
-
-    /**
-     * Optional: broadcast emote pack updates to other players.
-     * Implementation depends on your packet sending utilities.
-     */
-    public static void broadcastPlayerEmotePackUpdate(UUID playerUUID) {
-        Map<Integer, byte[]> emotes = playerEmotePacks.get(playerUUID);
-        if (emotes == null) return;
-
-        EmotePackToClientPayload payload = new EmotePackToClientPayload(playerUUID, emotes);
-        // TODO Send packet to all clients except the player (implement packet sending accordingly)
-        // Example: NetworkChannel.send(PacketDistributor.ALL.noArg(), payload);
     }
 }

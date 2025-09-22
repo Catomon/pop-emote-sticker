@@ -3,12 +3,16 @@ package io.github.catomon.popemotesticker.network.stc;
 import io.github.catomon.popemotesticker.PopEmoteSticker;
 import io.github.catomon.popemotesticker.client.EmoteClientManager;
 import io.github.catomon.popemotesticker.network.cts.EmotePackUploadPayload;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import java.util.UUID;
 
 public record RequestEmotePackPayload() implements CustomPacketPayload {
 
@@ -26,11 +30,10 @@ public record RequestEmotePackPayload() implements CustomPacketPayload {
     public static void handleOnNetwork(RequestEmotePackPayload payload, IPayloadContext context) {
         // On client: when receiving this request, send emote upload packet to server
         context.enqueueWork(() -> {
-            System.out.println("RequestEmotePackPayload");
-            var player = context.player();
+            Player player = Minecraft.getInstance().player;
             if (player == null) return;
 
-            var playerUUID = player.getUUID();
+            UUID playerUUID = player.getUUID();
             var emotes = EmoteClientManager.getLocalEmotePack();
             EmotePackUploadPayload uploadPayload = new EmotePackUploadPayload(playerUUID, emotes);
             PacketDistributor.sendToServer(uploadPayload);

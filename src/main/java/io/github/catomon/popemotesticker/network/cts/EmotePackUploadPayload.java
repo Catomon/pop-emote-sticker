@@ -37,8 +37,6 @@ public record EmotePackUploadPayload(UUID senderUUID, Map<Integer, byte[]> emote
 
     public static void handleOnNetwork(EmotePackUploadPayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
-            System.out.println("EmotePackUploadPayload");
-
             ServerPlayer sender = (ServerPlayer) context.player();
 
             // Store or update emote pack for this player on server

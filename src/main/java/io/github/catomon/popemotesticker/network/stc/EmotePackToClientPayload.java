@@ -34,8 +34,6 @@ public record EmotePackToClientPayload(UUID playerUUID, Map<Integer, byte[]> emo
 
     public static void handleOnNetwork(EmotePackToClientPayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
-            System.out.println("EmotePackToClientPayload");
-
             if (Minecraft.getInstance().player.getUUID().equals(payload.playerUUID))
                 return;
 
