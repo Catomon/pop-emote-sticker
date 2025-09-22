@@ -1,24 +1,9 @@
 package io.github.catomon.popemotesticker.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import io.github.catomon.popemotesticker.PopEmoteStickerMod;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import org.joml.Quaternionf;
-
-//@Mod.EventBusSubscriber(modid = PopEmoteStickerMod.MODID, value = Dist.CLIENT)
+//@Mod.EventBusSubscriber(modid = PopEmoteSticker.MODID, value = Dist.CLIENT)
 //public class PlayerRenderEvents {
 //
-//    private static final ResourceLocation TEXTURE = new ResourceLocation(PopEmoteStickerMod.MODID, "textures/emotes/emote.png");
+//    private static final ResourceLocation TEXTURE = new ResourceLocation(PopEmoteSticker.MODID, "textures/emotes/emote.png");
 //
 //    @SubscribeEvent
 //    public static void onRenderPlayerPost(RenderPlayerEvent.Post event) {

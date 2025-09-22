@@ -1,6 +1,12 @@
 package io.github.catomon.popemotesticker.network;
 
-import io.github.catomon.popemotesticker.PopEmoteStickerMod;
+import io.github.catomon.popemotesticker.PopEmoteSticker;
+import io.github.catomon.popemotesticker.network.cts.EmotePackUploadPacket;
+import io.github.catomon.popemotesticker.network.cts.EmoteToServerPacket;
+import io.github.catomon.popemotesticker.network.stc.AllPlayersEmotePacksPacket;
+import io.github.catomon.popemotesticker.network.stc.EmotePackToClientPacket;
+import io.github.catomon.popemotesticker.network.stc.EmoteToClientPacket;
+import io.github.catomon.popemotesticker.network.stc.RequestEmotePackPacket;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraftforge.network.NetworkDirection;
@@ -12,7 +18,7 @@ public class NetworkHandler {
     private static final String PROTOCOL_VERSION = "1";
 
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(PopEmoteStickerMod.MODID, "main"),
+            ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "main"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals
@@ -35,6 +41,33 @@ public class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT)
         );
 
+        INSTANCE.registerMessage(
+                nextPacketId(),
+                AllPlayersEmotePacksPacket.class,
+                AllPlayersEmotePacksPacket::encode,
+                AllPlayersEmotePacksPacket::new,
+                AllPlayersEmotePacksPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT)
+        );
+
+        INSTANCE.registerMessage(
+                nextPacketId(),
+                EmotePackToClientPacket.class,
+                EmotePackToClientPacket::encode,
+                EmotePackToClientPacket::new,
+                EmotePackToClientPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT)
+        );
+
+        INSTANCE.registerMessage(
+                nextPacketId(),
+                RequestEmotePackPacket.class,
+                RequestEmotePackPacket::encode,
+                RequestEmotePackPacket::new,
+                RequestEmotePackPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT)
+        );
+
         // Serverbound packet: client -> server
         INSTANCE.registerMessage(
                 nextPacketId(),
@@ -42,6 +75,15 @@ public class NetworkHandler {
                 EmoteToServerPacket::encode,
                 EmoteToServerPacket::new,
                 EmoteToServerPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER)
+        );
+
+        INSTANCE.registerMessage(
+                nextPacketId(),
+                EmotePackUploadPacket.class,
+                EmotePackUploadPacket::encode,
+                EmotePackUploadPacket::new,
+                EmotePackUploadPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER)
         );
     }

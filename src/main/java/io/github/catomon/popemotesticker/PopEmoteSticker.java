@@ -1,6 +1,7 @@
 package io.github.catomon.popemotesticker;
 
 import com.mojang.logging.LogUtils;
+import io.github.catomon.popemotesticker.client.EmoteClientManager;
 import io.github.catomon.popemotesticker.client.ModSounds;
 import io.github.catomon.popemotesticker.network.NetworkHandler;
 import net.minecraftforge.api.distmarker.Dist;
@@ -16,8 +17,8 @@ import org.slf4j.Logger;
 
 // Main entrypoint for the "Pop Emote Sticker" mod.
 // Make sure your modId is 'pop_emote_sticker' in both mods.toml and this class.
-@Mod(PopEmoteStickerMod.MODID)
-public class PopEmoteStickerMod {
+@Mod(PopEmoteSticker.MODID)
+public class PopEmoteSticker {
 
     // --- MOD CONSTANTS ---
     // Unique mod ID. Used for registry namespaces and must match mods.toml.
@@ -56,7 +57,7 @@ public class PopEmoteStickerMod {
     //                 .build());
 
     // Constructor: this runs once at mod load and is used for registering setup/event code.
-    public PopEmoteStickerMod(FMLJavaModLoadingContext context) {
+    public PopEmoteSticker(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
 
         // Register mod-wide setup event (for network, config, etc.):
@@ -81,7 +82,7 @@ public class PopEmoteStickerMod {
 
     // Called during common setup. Use this for network registration, custom event hooks, etc.
     private void commonSetup(final FMLCommonSetupEvent event) {
-        LOGGER.info("[PopEmoteSticker] Common setup starting");
+//        LOGGER.info("[PopEmoteSticker] Common setup starting");
 
         // Place networking registration, emote config loading, etc. here.
 
@@ -103,7 +104,7 @@ public class PopEmoteStickerMod {
     // Example: Listens for server start event, good for advanced mod/server logic.
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        LOGGER.info("[PopEmoteSticker] Server is starting!");
+//        LOGGER.info("[PopEmoteSticker] Server is starting!");
         // Setup emote system for server here, if needed.
     }
 
@@ -113,9 +114,15 @@ public class PopEmoteStickerMod {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            LOGGER.info("[PopEmoteSticker] Client setup starting");
+//            LOGGER.info("[PopEmoteSticker] Client setup starting");
             // Register your keybinds for showing the emote pie menu here.
             // Register GUIs, render handlers for emote stickers, etc.
+
+            try {
+                EmoteClientManager.getEmotePackFolder().toFile().mkdirs();
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
