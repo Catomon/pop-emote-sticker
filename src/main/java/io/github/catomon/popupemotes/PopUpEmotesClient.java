@@ -11,11 +11,11 @@ import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 // This class will not load on dedicated servers. Accessing client side code from here is safe.
-@Mod(value = PopEmoteSticker.MODID, dist = Dist.CLIENT)
+@Mod(value = PopUpEmotes.MODID, dist = Dist.CLIENT)
 // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-@EventBusSubscriber(modid = PopEmoteSticker.MODID, value = Dist.CLIENT)
-public class PopEmoteStickerClient {
-    public PopEmoteStickerClient(ModContainer container) {
+@EventBusSubscriber(modid = PopUpEmotes.MODID, value = Dist.CLIENT)
+public class PopUpEmotesClient {
+    public PopUpEmotesClient(ModContainer container) {
         // Allows NeoForge to create a config screen for this mod's configs.
         // The config screen is accessed by going to the Mods screen > clicking on your mod > clicking on config.
         // Do not forget to add translations for your config options to the en_us.json file.
@@ -25,8 +25,8 @@ public class PopEmoteStickerClient {
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
         // Some client setup code
-//        PopEmoteSticker.LOGGER.info("HELLO FROM CLIENT SETUP");
-//        PopEmoteSticker.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+//        PopUpEmotes.LOGGER.info("HELLO FROM CLIENT SETUP");
+//        PopUpEmotes.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
 
         try {
             EmoteClientManager.getEmotePackFolder().toFile().mkdirs();

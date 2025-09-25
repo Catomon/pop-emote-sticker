@@ -1,6 +1,6 @@
 package io.github.catomon.popupemotes.network.stc;
 
-import io.github.catomon.popupemotes.PopEmoteSticker;
+import io.github.catomon.popupemotes.PopUpEmotes;
 import io.github.catomon.popupemotes.client.EmoteClientManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.UUIDUtil;
@@ -18,7 +18,7 @@ import java.util.UUID;
 public record EmotePackToClientPayload(UUID playerUUID, Map<Integer, byte[]> emotes) implements CustomPacketPayload {
 
     public static final CustomPacketPayload.Type<EmotePackToClientPayload> TYPE =
-            new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "emote_pack_to_client"));
+            new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(PopUpEmotes.MODID, "emote_pack_to_client"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, EmotePackToClientPayload> STREAM_CODEC =
             StreamCodec.composite(
