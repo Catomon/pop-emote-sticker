@@ -1,7 +1,7 @@
-package io.github.catomon.popemotesticker.network.stc;
+package io.github.catomon.popupemotes.network.stc;
 
-import io.github.catomon.popemotesticker.client.EmoteRenderer;
-import io.github.catomon.popemotesticker.client.ModSounds;
+import io.github.catomon.popupemotes.client.EmoteRenderer;
+import io.github.catomon.popupemotes.client.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.sounds.SoundSource;

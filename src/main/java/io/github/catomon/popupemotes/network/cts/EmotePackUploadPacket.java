@@ -1,8 +1,8 @@
-package io.github.catomon.popemotesticker.network.cts;
+package io.github.catomon.popupemotes.network.cts;
 
-import io.github.catomon.popemotesticker.network.NetworkHandler;
-import io.github.catomon.popemotesticker.network.stc.EmotePackToClientPacket;
-import io.github.catomon.popemotesticker.server.ServerEmoteManager;
+import io.github.catomon.popupemotes.network.NetworkHandler;
+import io.github.catomon.popupemotes.network.stc.EmotePackToClientPacket;
+import io.github.catomon.popupemotes.server.ServerEmoteManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;

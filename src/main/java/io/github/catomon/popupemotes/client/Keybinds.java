@@ -1,9 +1,9 @@
-package io.github.catomon.popemotesticker.client;
+package io.github.catomon.popupemotes.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import io.github.catomon.popemotesticker.client.gui.PieMenuScreen;
-import io.github.catomon.popemotesticker.network.cts.EmoteToServerPacket;
-import io.github.catomon.popemotesticker.network.NetworkHandler;
+import io.github.catomon.popupemotes.client.gui.PieMenuScreen;
+import io.github.catomon.popupemotes.network.cts.EmoteToServerPacket;
+import io.github.catomon.popupemotes.network.NetworkHandler;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;

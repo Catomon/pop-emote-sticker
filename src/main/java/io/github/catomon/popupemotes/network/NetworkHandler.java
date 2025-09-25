@@ -1,12 +1,12 @@
-package io.github.catomon.popemotesticker.network;
+package io.github.catomon.popupemotes.network;
 
-import io.github.catomon.popemotesticker.PopEmoteSticker;
-import io.github.catomon.popemotesticker.network.cts.EmotePackUploadPacket;
-import io.github.catomon.popemotesticker.network.cts.EmoteToServerPacket;
-import io.github.catomon.popemotesticker.network.stc.AllPlayersEmotePacksPacket;
-import io.github.catomon.popemotesticker.network.stc.EmotePackToClientPacket;
-import io.github.catomon.popemotesticker.network.stc.EmoteToClientPacket;
-import io.github.catomon.popemotesticker.network.stc.RequestEmotePackPacket;
+import io.github.catomon.popupemotes.PopEmoteSticker;
+import io.github.catomon.popupemotes.network.cts.EmotePackUploadPacket;
+import io.github.catomon.popupemotes.network.cts.EmoteToServerPacket;
+import io.github.catomon.popupemotes.network.stc.AllPlayersEmotePacksPacket;
+import io.github.catomon.popupemotes.network.stc.EmotePackToClientPacket;
+import io.github.catomon.popupemotes.network.stc.EmoteToClientPacket;
+import io.github.catomon.popupemotes.network.stc.RequestEmotePackPacket;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraftforge.network.NetworkDirection;

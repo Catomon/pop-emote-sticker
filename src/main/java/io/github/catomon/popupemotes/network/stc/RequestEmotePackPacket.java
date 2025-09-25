@@ -1,16 +1,13 @@
-package io.github.catomon.popemotesticker.network.stc;
+package io.github.catomon.popupemotes.network.stc;
 
-import io.github.catomon.popemotesticker.client.EmoteClientManager;
-import io.github.catomon.popemotesticker.network.NetworkHandler;
-import io.github.catomon.popemotesticker.network.cts.EmotePackUploadPacket;
+import io.github.catomon.popupemotes.client.EmoteClientManager;
+import io.github.catomon.popupemotes.network.NetworkHandler;
+import io.github.catomon.popupemotes.network.cts.EmotePackUploadPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.PacketDistributor;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;

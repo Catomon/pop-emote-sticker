@@ -1,10 +1,10 @@
-package io.github.catomon.popemotesticker.client.gui;
+package io.github.catomon.popupemotes.client.gui;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Axis;
-import io.github.catomon.popemotesticker.PopEmoteSticker;
-import io.github.catomon.popemotesticker.client.EmoteClientManager;
+import io.github.catomon.popupemotes.PopEmoteSticker;
+import io.github.catomon.popupemotes.client.EmoteClientManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;

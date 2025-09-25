@@ -1,9 +1,9 @@
-package io.github.catomon.popemotesticker;
+package io.github.catomon.popupemotes;
 
 import com.mojang.logging.LogUtils;
-import io.github.catomon.popemotesticker.client.EmoteClientManager;
-import io.github.catomon.popemotesticker.client.ModSounds;
-import io.github.catomon.popemotesticker.network.NetworkHandler;
+import io.github.catomon.popupemotes.client.EmoteClientManager;
+import io.github.catomon.popupemotes.client.ModSounds;
+import io.github.catomon.popupemotes.network.NetworkHandler;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -16,13 +16,13 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
 // Main entrypoint for the "Pop Emote Sticker" mod.
-// Make sure your modId is 'pop_emote_sticker' in both mods.toml and this class.
+// Make sure your modId is 'pop_up_emotes' in both mods.toml and this class.
 @Mod(PopEmoteSticker.MODID)
 public class PopEmoteSticker {
 
     // --- MOD CONSTANTS ---
     // Unique mod ID. Used for registry namespaces and must match mods.toml.
-    public static final String MODID = "pop_emote_sticker";
+    public static final String MODID = "pop_up_emotes";
 
     // Logger for debug/information output.
     private static final Logger LOGGER = LogUtils.getLogger();

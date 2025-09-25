@@ -2,7 +2,7 @@
   "emote_sound": {
     "sounds": [
       {
-        "name": "pop_emote_sticker:emote_sound",
+        "name": "pop_up_emotes:emote_sound",
         "stream": false
       }
     ]

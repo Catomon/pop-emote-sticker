@@ -1,4 +1,4 @@
-package io.github.catomon.popemotesticker.client;
+package io.github.catomon.popupemotes.client;
 
 //@Mod.EventBusSubscriber(modid = PopEmoteSticker.MODID, value = Dist.CLIENT)
 //public class PlayerRenderEvents {
