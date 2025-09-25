@@ -1,7 +1,7 @@
-package io.github.catomon.popemotesticker.server;
+package io.github.catomon.popupemotes.server;
 
-import io.github.catomon.popemotesticker.network.stc.AllPlayersEmotePacksPayload;
-import io.github.catomon.popemotesticker.network.stc.RequestEmotePackPayload;
+import io.github.catomon.popupemotes.network.stc.AllPlayersEmotePacksPayload;
+import io.github.catomon.popupemotes.network.stc.RequestEmotePackPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;

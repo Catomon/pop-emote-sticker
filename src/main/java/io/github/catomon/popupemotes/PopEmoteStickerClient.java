@@ -1,6 +1,6 @@
-package io.github.catomon.popemotesticker;
+package io.github.catomon.popupemotes;
 
-import io.github.catomon.popemotesticker.client.EmoteClientManager;
+import io.github.catomon.popupemotes.client.EmoteClientManager;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;

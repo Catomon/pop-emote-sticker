@@ -1,11 +1,11 @@
-package io.github.catomon.popemotesticker.network;
+package io.github.catomon.popupemotes.network;
 
-import io.github.catomon.popemotesticker.network.cts.EmotePackUploadPayload;
-import io.github.catomon.popemotesticker.network.cts.EmoteToServerPayload;
-import io.github.catomon.popemotesticker.network.stc.AllPlayersEmotePacksPayload;
-import io.github.catomon.popemotesticker.network.stc.EmotePackToClientPayload;
-import io.github.catomon.popemotesticker.network.stc.EmoteToClientPayload;
-import io.github.catomon.popemotesticker.network.stc.RequestEmotePackPayload;
+import io.github.catomon.popupemotes.network.cts.EmotePackUploadPayload;
+import io.github.catomon.popupemotes.network.cts.EmoteToServerPayload;
+import io.github.catomon.popupemotes.network.stc.AllPlayersEmotePacksPayload;
+import io.github.catomon.popupemotes.network.stc.EmotePackToClientPayload;
+import io.github.catomon.popupemotes.network.stc.EmoteToClientPayload;
+import io.github.catomon.popupemotes.network.stc.RequestEmotePackPayload;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;

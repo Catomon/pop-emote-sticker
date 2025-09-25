@@ -1,8 +1,8 @@
-package io.github.catomon.popemotesticker.network.stc;
+package io.github.catomon.popupemotes.network.stc;
 
-import io.github.catomon.popemotesticker.PopEmoteSticker;
-import io.github.catomon.popemotesticker.client.EmoteClientManager;
-import io.github.catomon.popemotesticker.network.cts.EmotePackUploadPayload;
+import io.github.catomon.popupemotes.PopEmoteSticker;
+import io.github.catomon.popupemotes.client.EmoteClientManager;
+import io.github.catomon.popupemotes.network.cts.EmotePackUploadPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;

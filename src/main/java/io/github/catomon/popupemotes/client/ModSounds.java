@@ -1,6 +1,6 @@
-package io.github.catomon.popemotesticker.client;
+package io.github.catomon.popupemotes.client;
 
-import io.github.catomon.popemotesticker.PopEmoteSticker;
+import io.github.catomon.popupemotes.PopEmoteSticker;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;

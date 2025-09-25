@@ -1,4 +1,4 @@
-package io.github.catomon.popemotesticker.server;
+package io.github.catomon.popupemotes.server;
 
 import java.util.Map;
 import java.util.UUID;

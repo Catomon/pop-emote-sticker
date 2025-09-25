@@ -1,13 +1,13 @@
 {
-  "itemGroup.pop_emote_sticker": "Example Mod Tab",
-  "block.pop_emote_sticker.example_block": "Example Block",
-  "item.pop_emote_sticker.example_item": "Example Item",
+  "itemGroup.pop_up_emotes": "Example Mod Tab",
+  "block.pop_up_emotes.example_block": "Example Block",
+  "item.pop_up_emotes.example_item": "Example Item",
 
-  "pop_emote_sticker.configuration.title": "Pop Emote Sticker Configs",
-  "pop_emote_sticker.configuration.section.pop_emote_sticker.common.toml": "Pop Emote Sticker Configs",
-  "pop_emote_sticker.configuration.section.pop_emote_sticker.common.toml.title": "Pop Emote Sticker Configs",
-  "pop_emote_sticker.configuration.items": "Item List",
-  "pop_emote_sticker.configuration.logDirtBlock": "Log Dirt Block",
-  "pop_emote_sticker.configuration.magicNumberIntroduction": "Magic Number Text",
-  "pop_emote_sticker.configuration.magicNumber": "Magic Number"
+  "pop_up_emotes.configuration.title": "Pop Emote Sticker Configs",
+  "pop_up_emotes.configuration.section.pop_up_emotes.common.toml": "Pop Emote Sticker Configs",
+  "pop_up_emotes.configuration.section.pop_up_emotes.common.toml.title": "Pop Emote Sticker Configs",
+  "pop_up_emotes.configuration.items": "Item List",
+  "pop_up_emotes.configuration.logDirtBlock": "Log Dirt Block",
+  "pop_up_emotes.configuration.magicNumberIntroduction": "Magic Number Text",
+  "pop_up_emotes.configuration.magicNumber": "Magic Number"
 }

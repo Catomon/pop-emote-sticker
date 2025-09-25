@@ -1,7 +1,7 @@
-package io.github.catomon.popemotesticker.network.cts;
+package io.github.catomon.popupemotes.network.cts;
 
-import io.github.catomon.popemotesticker.PopEmoteSticker;
-import io.github.catomon.popemotesticker.network.stc.EmoteToClientPayload;
+import io.github.catomon.popupemotes.PopEmoteSticker;
+import io.github.catomon.popupemotes.network.stc.EmoteToClientPayload;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
