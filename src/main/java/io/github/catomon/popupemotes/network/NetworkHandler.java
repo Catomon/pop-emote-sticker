@@ -1,6 +1,6 @@
 package io.github.catomon.popupemotes.network;
 
-import io.github.catomon.popupemotes.PopEmoteSticker;
+import io.github.catomon.popupemotes.PopUpEmotes;
 import io.github.catomon.popupemotes.network.cts.EmotePackUploadPacket;
 import io.github.catomon.popupemotes.network.cts.EmoteToServerPacket;
 import io.github.catomon.popupemotes.network.stc.AllPlayersEmotePacksPacket;
@@ -18,7 +18,7 @@ public class NetworkHandler {
     private static final String PROTOCOL_VERSION = "1";
 
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-            ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "main"),
+            ResourceLocation.fromNamespaceAndPath(PopUpEmotes.MODID, "main"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals

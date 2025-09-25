@@ -3,7 +3,7 @@ package io.github.catomon.popupemotes.client.gui;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Axis;
-import io.github.catomon.popupemotes.PopEmoteSticker;
+import io.github.catomon.popupemotes.PopUpEmotes;
 import io.github.catomon.popupemotes.client.EmoteClientManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -22,7 +22,7 @@ public class PieMenuScreen extends Screen {
     private static final float RADIUS = 100f;
 
     public static int selectedSlice = -1;
-    private static final ResourceLocation SLICE_TEXTURE = ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "textures/gui/pie_slice.png");
+    private static final ResourceLocation SLICE_TEXTURE = ResourceLocation.fromNamespaceAndPath(PopUpEmotes.MODID, "textures/gui/pie_slice.png");
 
     private final Map<Integer, DynamicTexture> dynamicEmoteTextures = new HashMap<>();
     private final Map<Integer, ResourceLocation> dynamicEmoteResourceLocations = new HashMap<>();

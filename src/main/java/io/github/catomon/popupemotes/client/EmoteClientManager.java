@@ -1,6 +1,6 @@
 package io.github.catomon.popupemotes.client;
 
-import io.github.catomon.popupemotes.PopEmoteSticker;
+import io.github.catomon.popupemotes.PopUpEmotes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 
@@ -18,14 +18,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class EmoteClientManager {
     public static final ResourceLocation[] EMOTE_TEXTURES = new ResourceLocation[]{
-            ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "textures/emotes/emote1.png"),
-            ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "textures/emotes/emote2.png"),
-            ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "textures/emotes/emote3.png"),
-            ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "textures/emotes/emote4.png"),
-            ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "textures/emotes/emote5.png"),
-            ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "textures/emotes/emote6.png"),
-            ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "textures/emotes/emote7.png"),
-            ResourceLocation.fromNamespaceAndPath(PopEmoteSticker.MODID, "textures/emotes/emote8.png")
+            ResourceLocation.fromNamespaceAndPath(PopUpEmotes.MODID, "textures/emotes/emote1.png"),
+            ResourceLocation.fromNamespaceAndPath(PopUpEmotes.MODID, "textures/emotes/emote2.png"),
+            ResourceLocation.fromNamespaceAndPath(PopUpEmotes.MODID, "textures/emotes/emote3.png"),
+            ResourceLocation.fromNamespaceAndPath(PopUpEmotes.MODID, "textures/emotes/emote4.png"),
+            ResourceLocation.fromNamespaceAndPath(PopUpEmotes.MODID, "textures/emotes/emote5.png"),
+            ResourceLocation.fromNamespaceAndPath(PopUpEmotes.MODID, "textures/emotes/emote6.png"),
+            ResourceLocation.fromNamespaceAndPath(PopUpEmotes.MODID, "textures/emotes/emote7.png"),
+            ResourceLocation.fromNamespaceAndPath(PopUpEmotes.MODID, "textures/emotes/emote8.png")
     };
 
     private static final Map<UUID, Map<Integer, byte[]>> cachedEmotePacks = new ConcurrentHashMap<>();

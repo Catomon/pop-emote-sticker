@@ -1,9 +1,9 @@
 package io.github.catomon.popupemotes.client;
 
-//@Mod.EventBusSubscriber(modid = PopEmoteSticker.MODID, value = Dist.CLIENT)
+//@Mod.EventBusSubscriber(modid = PopUpEmotes.MODID, value = Dist.CLIENT)
 //public class PlayerRenderEvents {
 //
-//    private static final ResourceLocation TEXTURE = new ResourceLocation(PopEmoteSticker.MODID, "textures/emotes/emote.png");
+//    private static final ResourceLocation TEXTURE = new ResourceLocation(PopUpEmotes.MODID, "textures/emotes/emote.png");
 //
 //    @SubscribeEvent
 //    public static void onRenderPlayerPost(RenderPlayerEvent.Post event) {

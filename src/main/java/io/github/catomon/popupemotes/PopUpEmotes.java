@@ -17,8 +17,8 @@ import org.slf4j.Logger;
 
 // Main entrypoint for the "Pop Emote Sticker" mod.
 // Make sure your modId is 'pop_up_emotes' in both mods.toml and this class.
-@Mod(PopEmoteSticker.MODID)
-public class PopEmoteSticker {
+@Mod(PopUpEmotes.MODID)
+public class PopUpEmotes {
 
     // --- MOD CONSTANTS ---
     // Unique mod ID. Used for registry namespaces and must match mods.toml.
@@ -57,7 +57,7 @@ public class PopEmoteSticker {
     //                 .build());
 
     // Constructor: this runs once at mod load and is used for registering setup/event code.
-    public PopEmoteSticker(FMLJavaModLoadingContext context) {
+    public PopUpEmotes(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
 
         // Register mod-wide setup event (for network, config, etc.):
@@ -82,7 +82,7 @@ public class PopEmoteSticker {
 
     // Called during common setup. Use this for network registration, custom event hooks, etc.
     private void commonSetup(final FMLCommonSetupEvent event) {
-//        LOGGER.info("[PopEmoteSticker] Common setup starting");
+//        LOGGER.info("[PopUpEmotes] Common setup starting");
 
         // Place networking registration, emote config loading, etc. here.
 
@@ -104,7 +104,7 @@ public class PopEmoteSticker {
     // Example: Listens for server start event, good for advanced mod/server logic.
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-//        LOGGER.info("[PopEmoteSticker] Server is starting!");
+//        LOGGER.info("[PopUpEmotes] Server is starting!");
         // Setup emote system for server here, if needed.
     }
 
@@ -114,7 +114,7 @@ public class PopEmoteSticker {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-//            LOGGER.info("[PopEmoteSticker] Client setup starting");
+//            LOGGER.info("[PopUpEmotes] Client setup starting");
             // Register your keybinds for showing the emote pie menu here.
             // Register GUIs, render handlers for emote stickers, etc.
 
