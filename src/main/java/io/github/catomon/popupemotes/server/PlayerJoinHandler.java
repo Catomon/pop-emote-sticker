@@ -18,4 +18,11 @@ public class PlayerJoinHandler {
 
         PacketDistributor.sendToPlayer(player, new RequestEmotePackPayload());
     }
+
+    @SubscribeEvent
+    public static void onPlayerExit(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player)) return;
+
+        ServerEmoteManager.removePlayerEmotePack(player.getUUID());
+    }
 }

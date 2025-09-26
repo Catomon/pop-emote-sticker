@@ -12,6 +12,8 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public record RequestEmotePackPayload() implements CustomPacketPayload {
@@ -35,6 +37,10 @@ public record RequestEmotePackPayload() implements CustomPacketPayload {
 
             UUID playerUUID = player.getUUID();
             var emotes = EmoteClientManager.getLocalEmotePack();
+
+            if (emotes == null)
+                emotes = new HashMap<>();
+
             EmotePackUploadPayload uploadPayload = new EmotePackUploadPayload(playerUUID, emotes);
             PacketDistributor.sendToServer(uploadPayload);
         }).exceptionally(e -> {

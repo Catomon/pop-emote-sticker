@@ -43,7 +43,7 @@ public record EmoteToServerPayload(int emoteId, UUID senderUUID) implements Cust
             EmoteToClientPayload broadcastPayload = new EmoteToClientPayload(payload.emoteId(), payload.senderUUID());
             PacketDistributor.sendToPlayersTrackingEntityAndSelf(sender, broadcastPayload);
         }).exceptionally(e -> {
-            context.disconnect(Component.translatable("my_mod.networking.failed", e.getMessage()));
+            context.disconnect(Component.translatable("pop_up_emotes.networking.failed", e.getMessage()));
             return null;
         });
     }

@@ -39,14 +39,11 @@ public record EmotePackUploadPayload(UUID senderUUID, Map<Integer, byte[]> emote
         context.enqueueWork(() -> {
             ServerPlayer sender = (ServerPlayer) context.player();
 
-            // Store or update emote pack for this player on server
             ServerEmoteManager.setPlayerEmotePack(sender.getUUID(), payload.emotes());
 
-            // Broadcast emote pack metadata or usage info to other players as needed
-            // Optionally send small metadata packets and send full data only when requested
             PacketDistributor.sendToAllPlayers(new EmotePackToClientPayload(sender.getUUID(), payload.emotes()));
         }).exceptionally(e -> {
-            context.disconnect(Component.translatable("my_mod.networking.failed", e.getMessage()));
+            context.disconnect(Component.translatable("pop_up_emotes.networking.failed", e.getMessage()));
             return null;
         });
     }

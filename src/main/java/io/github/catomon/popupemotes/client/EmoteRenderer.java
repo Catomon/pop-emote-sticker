@@ -32,39 +32,25 @@ public class EmoteRenderer {
 
     private static final float BASE_SIZE = 0.65f;
 
-    // Track active emotes on players with age for fade logic
     private static final Map<UUID, EmoteData> activeEmotes = new HashMap<>();
-
-    private static class EmoteData {
-        final int emoteId;
-        final DynamicTexture texture; // DynamicTexture created from byte[] data
-        int ageTicks = 0;
-
-        EmoteData(int emoteId, DynamicTexture texture) {
-            this.emoteId = emoteId;
-            this.texture = texture;
-        }
-
-        void close() {
-            texture.close(); // Free texture resource when no longer needed
-        }
-    }
+    private static final Map<UUID, ResourceLocation> emoteTextureLocations = new HashMap<>();
 
     public static void showEmoteOnPlayer(UUID playerUUID, int emoteId) {
         Map<Integer, byte[]> emotes;
         UUID localUUID = Minecraft.getInstance().player != null ? Minecraft.getInstance().player.getUUID() : null;
 
         if (localUUID != null && localUUID.equals(playerUUID)) {
-            // Use local player emote pack (with default fallbacks merged)
             emotes = EmoteClientManager.getLocalEmotePack();
         } else {
-            // Use cached network emote pack or empty map
             emotes = EmoteClientManager.getPlayerEmotePack(playerUUID);
+        }
+
+        if (emotes == null) {
+            emotes = new HashMap<>();
         }
 
         byte[] imageData = emotes.get(emoteId);
 
-        // If emote data missing in player pack, fallback to default cached emotes
         if (imageData == null || imageData.length == 0) {
             Map<Integer, byte[]> defaultEmotes = EmoteClientManager.loadDefaultEmotesAsBytes();
             if (defaultEmotes.containsKey(emoteId)) {
@@ -83,12 +69,16 @@ public class EmoteRenderer {
             return;
         }
 
-        DynamicTexture texture = new DynamicTexture(nativeImage);
+        DynamicTexture dynamicTexture = new DynamicTexture(nativeImage);
 
-        EmoteData existing = activeEmotes.put(playerUUID, new EmoteData(emoteId, texture));
+        EmoteData existing = activeEmotes.put(playerUUID, new EmoteData(emoteId, dynamicTexture));
         if (existing != null) {
             existing.close();
         }
+
+        ResourceLocation textureLocation = Minecraft.getInstance().getTextureManager()
+                .register("emote_" + playerUUID, dynamicTexture);
+        emoteTextureLocations.put(playerUUID, textureLocation);
     }
 
     // Tick updates fade timing and removes old emotes
@@ -101,7 +91,9 @@ public class EmoteRenderer {
             emoteData.ageTicks++;
             if (emoteData.ageTicks >= TOTAL_TICKS) {
                 emoteData.close();
+                UUID playerUUID = entry.getKey();
                 iterator.remove();
+                emoteTextureLocations.remove(playerUUID);
             }
         }
     }
@@ -116,8 +108,8 @@ public class EmoteRenderer {
             return;
 
         EmoteData emoteData = activeEmotes.get(playerUUID);
-        DynamicTexture texture = emoteData.texture;
-        ResourceLocation emoteResource = Minecraft.getInstance().getTextureManager().register("emote_" + playerUUID, texture);
+        ResourceLocation emoteResource = emoteTextureLocations.get(playerUUID);
+        if (emoteResource == null) return;
 
         PoseStack poseStack = event.getPoseStack();
 
@@ -191,5 +183,20 @@ public class EmoteRenderer {
         RenderSystem.disableBlend();
 
         poseStack.popPose();
+    }
+
+    private static class EmoteData {
+        final int emoteId;
+        final DynamicTexture texture;
+        int ageTicks = 0;
+
+        EmoteData(int emoteId, DynamicTexture texture) {
+            this.emoteId = emoteId;
+            this.texture = texture;
+        }
+
+        void close() {
+            texture.close();
+        }
     }
 }

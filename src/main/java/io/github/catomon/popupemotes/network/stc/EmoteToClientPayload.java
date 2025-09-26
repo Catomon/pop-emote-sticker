@@ -59,7 +59,7 @@ public record EmoteToClientPayload(int emoteId, UUID senderUUID) implements Cust
             }
         }).exceptionally(e -> {
             // Optionally handle exceptions and disconnect if needed
-            context.disconnect(Component.translatable("my_mod.networking.failed", e.getMessage()));
+            context.disconnect(Component.translatable("pop_up_emotes.networking.failed", e.getMessage()));
             return null;
         });
     }

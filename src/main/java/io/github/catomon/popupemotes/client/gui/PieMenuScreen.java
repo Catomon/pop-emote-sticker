@@ -36,6 +36,10 @@ public class PieMenuScreen extends Screen {
 
     private void loadDynamicTextures() {
         Map<Integer, byte[]> localEmotes = EmoteClientManager.getLocalEmotePack();
+        if (localEmotes == null || localEmotes.isEmpty()) {
+            return;
+        }
+
         var textureManager = Minecraft.getInstance().getTextureManager();
 
         for (int i = 0; i < SLICE_COUNT; i++) {

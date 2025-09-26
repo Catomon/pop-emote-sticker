@@ -34,13 +34,13 @@ public record EmotePackToClientPayload(UUID playerUUID, Map<Integer, byte[]> emo
 
     public static void handleOnNetwork(EmotePackToClientPayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
-            if (Minecraft.getInstance().player.getUUID().equals(payload.playerUUID))
-                return;
+            if (Minecraft.getInstance().player != null)
+                if (Minecraft.getInstance().player.getUUID().equals(payload.playerUUID))
+                    return;
 
-            // Client-side: cache or update emote pack for the player UUID
             EmoteClientManager.cachePlayerEmotePack(payload.playerUUID(), payload.emotes());
         }).exceptionally(e -> {
-            // Handle errors gracefully
+            e.printStackTrace();
             return null;
         });
     }

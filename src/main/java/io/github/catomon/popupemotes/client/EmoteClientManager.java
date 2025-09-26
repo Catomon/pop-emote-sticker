@@ -3,6 +3,8 @@ package io.github.catomon.popupemotes.client;
 import io.github.catomon.popupemotes.PopUpEmotes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -12,6 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static io.github.catomon.popupemotes.Config.CUSTOM_PACK_FOLDER_NAME;
 
 /**
  * Client-side manager to cache emote packs for players.
@@ -31,32 +35,43 @@ public class EmoteClientManager {
     private static final Map<UUID, Map<Integer, byte[]>> cachedEmotePacks = new ConcurrentHashMap<>();
     private static Map<Integer, byte[]> cachedLocalEmotePack = null;
     private static Map<Integer, byte[]> cachedDefaultEmoteBytes = null;
-
-    /**
-     * Returns the local emote pack for the client player.
-     * Loads from local disk folder if present and not empty,
-     * otherwise falls back to default bundled asset textures.
-     */
-    public static Map<Integer, byte[]> getLocalEmotePack() {
+    
+    public static @Nullable Map<Integer, byte[]> getLocalEmotePack() {
         if (cachedLocalEmotePack != null && !cachedLocalEmotePack.isEmpty()) {
             return cachedLocalEmotePack;
         }
-        // Try load from disk
         Map<Integer, byte[]> fromDisk = loadLocalEmotePack();
         if (!fromDisk.isEmpty()) {
             cachedLocalEmotePack = fromDisk;
             return fromDisk;
         }
-        // Fallback: load default emotes from mod assets as byte arrays
-        cachedLocalEmotePack = loadDefaultEmotesAsBytes();
         return cachedLocalEmotePack;
+    }
+
+    public static void clearCache() {
+        cachedEmotePacks.clear();
+        cachedLocalEmotePack = null;
+        cachedDefaultEmoteBytes = null;
+    }
+
+    public static void recreateCache() {
+        clearCache();
+
+        getLocalEmotePack();
+        loadDefaultEmotesAsBytes();
     }
 
     private static Map<Integer, byte[]> loadLocalEmotePack() {
         Map<Integer, byte[]> emotesMap = new HashMap<>();
         try {
             Path baseFolder = getEmotePackFolder();
-            try (DirectoryStream<Path> stream = Files.newDirectoryStream(baseFolder, "*.png")) {
+
+            DirectoryStream.Filter<Path> filter = entry -> {
+                String name = entry.getFileName().toString().toLowerCase();
+                return name.endsWith(".png") || name.endsWith(".jpg");
+            };
+
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(baseFolder, filter)) {
                 int index = 0;
                 for (Path entry : stream) {
                     if (index >= 8) break;
@@ -111,13 +126,15 @@ public class EmoteClientManager {
         }
     }
 
+    /*
+    * For local player, return the local emote pack
+    * For others, return cached pack or empty
+    */
     public static Map<Integer, byte[]> getPlayerEmotePack(UUID playerUUID) {
         var player = Minecraft.getInstance().player;
         if (player != null && player.getUUID().equals(playerUUID)) {
-            // For local player, return the local emote pack with default fallback
             return getLocalEmotePack();
         }
-        // For others, return cached pack or empty
         return cachedEmotePacks.getOrDefault(playerUUID, Map.of());
     }
 
@@ -130,6 +147,6 @@ public class EmoteClientManager {
     }
 
     public static Path getEmotePackFolder() {
-        return Minecraft.getInstance().gameDirectory.toPath().resolve("pop_emote_pack");
+        return Minecraft.getInstance().gameDirectory.toPath().resolve(CUSTOM_PACK_FOLDER_NAME);
     }
 }

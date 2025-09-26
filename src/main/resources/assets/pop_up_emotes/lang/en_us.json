@@ -1,13 +1,8 @@
 {
-  "itemGroup.pop_up_emotes": "Example Mod Tab",
-  "block.pop_up_emotes.example_block": "Example Block",
-  "item.pop_up_emotes.example_item": "Example Item",
-
-  "pop_up_emotes.configuration.title": "Pop Emote Sticker Configs",
-  "pop_up_emotes.configuration.section.pop_up_emotes.common.toml": "Pop Emote Sticker Configs",
-  "pop_up_emotes.configuration.section.pop_up_emotes.common.toml.title": "Pop Emote Sticker Configs",
-  "pop_up_emotes.configuration.items": "Item List",
-  "pop_up_emotes.configuration.logDirtBlock": "Log Dirt Block",
-  "pop_up_emotes.configuration.magicNumberIntroduction": "Magic Number Text",
-  "pop_up_emotes.configuration.magicNumber": "Magic Number"
+  "pop_up_emotes.configuration.title": "Pop-up Emotes Config",
+  "pop_up_emotes.config.reload": "Reload emotes",
+  "pop_up_emotes.config.reload_disabled": "Can't reload while playing",
+  "pop_up_emotes.config.open_emotes_folder": "Open emotes folder",
+  "pop_up_emotes.config.no_emotes_found": "No custom emotes found",
+  "pop_up_emotes.networking.failed": "Pop-up Emotes: sry mod networking go boom (may not be my fault tho)"
 }
