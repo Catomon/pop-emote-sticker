@@ -52,11 +52,9 @@ public class EmotePackUploadPacket {
         context.enqueueWork(() -> {
             ServerPlayer sender = context.getSender();
             if (sender == null) return;
-
-            // Store or update emote pack for this player
+            
             ServerEmoteManager.setPlayerEmotePack(sender.getUUID(), packet.emotes);
 
-            // Broadcast emote pack metadata or usage info to other players as needed
             NetworkHandler.INSTANCE.send(
                 PacketDistributor.ALL.noArg(),
                 new EmotePackToClientPacket(sender.getUUID(), packet.emotes)

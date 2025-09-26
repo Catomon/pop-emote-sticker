@@ -33,6 +33,7 @@ public class EmoteRenderer {
     private static final float BASE_SIZE = 0.65f;
 
     private static final Map<UUID, EmoteData> activeEmotes = new HashMap<>();
+    private static final Map<UUID, ResourceLocation> emoteTextureLocations = new HashMap<>();
 
     public static void showEmoteOnPlayer(UUID playerUUID, int emoteId) {
         Map<Integer, byte[]> emotes;
@@ -42,6 +43,10 @@ public class EmoteRenderer {
             emotes = EmoteClientManager.getLocalEmotePack();
         } else {
             emotes = EmoteClientManager.getPlayerEmotePack(playerUUID);
+        }
+
+        if (emotes == null) {
+            emotes = new HashMap<>();
         }
 
         byte[] imageData = emotes.get(emoteId);
@@ -70,8 +75,13 @@ public class EmoteRenderer {
         if (previous != null) {
             previous.close();
         }
+
+        ResourceLocation textureLocation = Minecraft.getInstance().getTextureManager()
+                .register("emote_" + playerUUID, dynamicTexture);
+        emoteTextureLocations.put(playerUUID, textureLocation);
     }
 
+    // Tick updates fade timing and removes old emotes
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
@@ -81,12 +91,16 @@ public class EmoteRenderer {
                 EmoteData emoteData = entry.getValue();
                 emoteData.ageTicks++;
                 if (emoteData.ageTicks >= TOTAL_TICKS) {
+                    emoteData.close();
+                    UUID playerUUID = entry.getKey();
                     iterator.remove();
+                    emoteTextureLocations.remove(playerUUID);
                 }
             }
         }
     }
 
+    // Render emote above players with fade-in/out and scaling animations
     @SubscribeEvent
     public static void onPlayerRender(RenderPlayerEvent.Post event) {
         Player player = event.getEntity();
@@ -95,9 +109,8 @@ public class EmoteRenderer {
         if (!activeEmotes.containsKey(playerUUID)) return;
 
         EmoteData data = activeEmotes.get(playerUUID);
-        DynamicTexture texture = data.texture;
-
-        ResourceLocation textureLocation = Minecraft.getInstance().getTextureManager().register("emote_" + playerUUID, texture);
+        ResourceLocation emoteResource = emoteTextureLocations.get(playerUUID);
+        if (emoteResource == null) return;
 
         PoseStack poseStack = event.getPoseStack();
 
@@ -129,13 +142,13 @@ public class EmoteRenderer {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
-        mc.getTextureManager().bindForSetup(textureLocation);
+        mc.getTextureManager().bindForSetup(emoteResource);
 
-        VertexConsumer vertexBuilder = mc.renderBuffers().bufferSource().getBuffer(RenderType.entityTranslucent(textureLocation));
+        VertexConsumer vertexBuilder = mc.renderBuffers().bufferSource().getBuffer(RenderType.entityTranslucent(emoteResource));
 
         float halfSize = BASE_SIZE / 2f;
 
-        vertexBuilder.vertex(poseStack.last().pose(), -halfSize,  halfSize, 0f)
+        vertexBuilder.vertex(poseStack.last().pose(), -halfSize, halfSize, 0f)
                 .color(1f, 1f, 1f, alpha)
                 .uv(0f, 0f)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
@@ -143,7 +156,7 @@ public class EmoteRenderer {
                 .normal(0f, 1f, 0f)
                 .endVertex();
 
-        vertexBuilder.vertex(poseStack.last().pose(),  halfSize,  halfSize, 0f)
+        vertexBuilder.vertex(poseStack.last().pose(), halfSize, halfSize, 0f)
                 .color(1f, 1f, 1f, alpha)
                 .uv(1f, 0f)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
@@ -151,7 +164,7 @@ public class EmoteRenderer {
                 .normal(0f, 1f, 0f)
                 .endVertex();
 
-        vertexBuilder.vertex(poseStack.last().pose(),  halfSize, -halfSize, 0f)
+        vertexBuilder.vertex(poseStack.last().pose(), halfSize, -halfSize, 0f)
                 .color(1f, 1f, 1f, alpha)
                 .uv(1f, 1f)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
@@ -167,7 +180,7 @@ public class EmoteRenderer {
                 .normal(0f, 1f, 0f)
                 .endVertex();
 
-        mc.renderBuffers().bufferSource().endBatch(RenderType.entityTranslucent(textureLocation));
+        mc.renderBuffers().bufferSource().endBatch(RenderType.entityTranslucent(emoteResource));
 
         RenderSystem.disableBlend();
 

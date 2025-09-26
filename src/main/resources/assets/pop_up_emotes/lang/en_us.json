@@ -1,0 +1,8 @@
+{
+  "pop_up_emotes.configuration.title": "Pop-up Emotes Config",
+  "pop_up_emotes.config.reload": "Reload emotes",
+  "pop_up_emotes.config.reload_disabled": "Can't reload while playing",
+  "pop_up_emotes.config.open_emotes_folder": "Open emotes folder",
+  "pop_up_emotes.config.no_emotes_found": "No custom emotes found",
+  "pop_up_emotes.networking.failed": "Pop-up Emotes: sry mod networking go boom (may not be my fault tho)"
+}

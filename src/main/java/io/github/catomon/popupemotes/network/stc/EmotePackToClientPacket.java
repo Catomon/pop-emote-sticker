@@ -48,10 +48,9 @@ public class EmotePackToClientPacket {
         }
 
         context.enqueueWork(() -> {
-            if (Minecraft.getInstance().player == null) return;
-
-            if (Minecraft.getInstance().player.getUUID().equals(packet.playerUUID))
-                return;
+            if (Minecraft.getInstance().player != null)
+                if (Minecraft.getInstance().player.getUUID().equals(packet.playerUUID))
+                    return;
 
             EmoteClientManager.cachePlayerEmotePack(packet.playerUUID, packet.emotes);
         });
