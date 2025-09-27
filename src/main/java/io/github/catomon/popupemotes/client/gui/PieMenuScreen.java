@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Axis;
 import io.github.catomon.popupemotes.PopUpEmotes;
-import io.github.catomon.popupemotes.client.EmoteClientManager;
+import io.github.catomon.popupemotes.client.ClientEmotePacksManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.github.catomon.popupemotes.client.EmoteClientManager.EMOTE_TEXTURES;
+import static io.github.catomon.popupemotes.client.ClientEmotePacksManager.EMOTE_TEXTURES;
 
 public class PieMenuScreen extends Screen {
     private static final int SLICE_COUNT = 8;
@@ -35,7 +35,7 @@ public class PieMenuScreen extends Screen {
     }
 
     private void loadDynamicTextures() {
-        Map<Integer, byte[]> localEmotes = EmoteClientManager.getLocalEmotePack();
+        Map<Integer, byte[]> localEmotes = ClientEmotePacksManager.getLocalEmotePack();
         if (localEmotes == null || localEmotes.isEmpty()) {
             return;
         }

@@ -4,17 +4,18 @@ import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.RenderPlayerEvent;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -22,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class EmoteRenderer {
+public class EmoteLayerRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
     private static final int TICKS_FADE_IN = 5;
     private static final int TICKS_STATIC = 40;
     private static final int TICKS_FADE_OUT = 5;
@@ -33,7 +34,10 @@ public class EmoteRenderer {
     private static final Map<UUID, EmoteData> activeEmotes = new HashMap<>();
     private static final Map<UUID, ResourceLocation> emoteTextureLocations = new HashMap<>();
 
-    //todo refactor see EmoteLayerRenderer.showEmoteOnPlayer
+    public EmoteLayerRenderer(LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> renderer) {
+        super(renderer);
+    }
+
     public static void showEmoteOnPlayer(UUID playerUUID, int emoteId) {
         Map<Integer, byte[]> emotes;
         UUID localUUID = Minecraft.getInstance().player != null ? Minecraft.getInstance().player.getUUID() : null;
@@ -80,8 +84,7 @@ public class EmoteRenderer {
         emoteTextureLocations.put(playerUUID, textureLocation);
     }
 
-    // Tick updates fade timing and removes old emotes
-    public static void onClientTick(ClientTickEvent.Post event) {
+    public static void tickEmotes() {
         var iterator = activeEmotes.entrySet().iterator();
         while (iterator.hasNext()) {
             var entry = iterator.next();
@@ -96,9 +99,9 @@ public class EmoteRenderer {
         }
     }
 
-    // Render emote above players with fade-in/out and scaling animations
-    public static void onPlayerRender(RenderPlayerEvent.Post event) {
-        Player player = event.getEntity();
+    @Override
+    public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer player,
+                       float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         UUID playerUUID = player.getUUID();
 
         if (!activeEmotes.containsKey(playerUUID))
@@ -107,8 +110,6 @@ public class EmoteRenderer {
         EmoteData emoteData = activeEmotes.get(playerUUID);
         ResourceLocation emoteResource = emoteTextureLocations.get(playerUUID);
         if (emoteResource == null) return;
-
-        PoseStack poseStack = event.getPoseStack();
 
         float alpha;
         float scale;
@@ -130,25 +131,25 @@ public class EmoteRenderer {
 
         poseStack.pushPose();
 
-        poseStack.translate(0, player.getBbHeight() + 0.5, 0);
+        poseStack.translate(0, -player.getBbHeight() + 0.5, 0);
 
-        var camera = Minecraft.getInstance().getEntityRenderDispatcher().camera;
-        poseStack.mulPose(camera.rotation());
+        float halfSize = BASE_SIZE / 2f;
+
+        float cameraYaw = Minecraft.getInstance().getEntityRenderDispatcher().camera.getYRot();
+        float cameraPitch = Minecraft.getInstance().getEntityRenderDispatcher().camera.getXRot();
+
+        poseStack.mulPose(Axis.YP.rotationDegrees(cameraYaw - player.yBodyRot));
+        poseStack.mulPose(Axis.XP.rotationDegrees(cameraPitch));
 
         poseStack.scale(scale, scale, scale);
-
-        Minecraft mc = Minecraft.getInstance();
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
-        mc.getTextureManager().bindForSetup(emoteResource);
+        TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+        textureManager.bindForSetup(emoteResource);
 
-        VertexConsumer vertexBuilder = mc.renderBuffers().bufferSource().getBuffer(RenderType.entityTranslucent(emoteResource));
-
-        float halfSize = BASE_SIZE / 2f;
-
-        var packedLight = event.getPackedLight();
+        VertexConsumer vertexBuilder = bufferSource.getBuffer(RenderType.entityTranslucent(emoteResource));
 
         vertexBuilder.addVertex(poseStack.last().pose(), -halfSize, halfSize, 0f)
                 .setColor(1f, 1f, 1f, alpha)
@@ -177,8 +178,6 @@ public class EmoteRenderer {
                 .setOverlay(OverlayTexture.NO_OVERLAY)
                 .setLight(packedLight)
                 .setNormal(0f, 0f, 1f);
-
-        mc.renderBuffers().bufferSource().endBatch(RenderType.entityTranslucent(emoteResource));
 
         RenderSystem.disableBlend();
 

@@ -1,7 +1,7 @@
 package io.github.catomon.popupemotes.network.stc;
 
 import io.github.catomon.popupemotes.PopUpEmotes;
-import io.github.catomon.popupemotes.client.EmoteClientManager;
+import io.github.catomon.popupemotes.client.ClientEmotePacksManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -38,7 +38,7 @@ public record EmotePackToClientPayload(UUID playerUUID, Map<Integer, byte[]> emo
                 if (Minecraft.getInstance().player.getUUID().equals(payload.playerUUID))
                     return;
 
-            EmoteClientManager.cachePlayerEmotePack(payload.playerUUID(), payload.emotes());
+            ClientEmotePacksManager.cachePlayerEmotePack(payload.playerUUID(), payload.emotes());
         }).exceptionally(e -> {
             e.printStackTrace();
             return null;

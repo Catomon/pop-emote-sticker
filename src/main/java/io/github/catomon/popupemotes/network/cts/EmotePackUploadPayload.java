@@ -2,7 +2,7 @@ package io.github.catomon.popupemotes.network.cts;
 
 import io.github.catomon.popupemotes.PopUpEmotes;
 import io.github.catomon.popupemotes.network.stc.EmotePackToClientPayload;
-import io.github.catomon.popupemotes.server.ServerEmoteManager;
+import io.github.catomon.popupemotes.server.ServerEmotePacksManager;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -39,7 +39,7 @@ public record EmotePackUploadPayload(UUID senderUUID, Map<Integer, byte[]> emote
         context.enqueueWork(() -> {
             ServerPlayer sender = (ServerPlayer) context.player();
 
-            ServerEmoteManager.setPlayerEmotePack(sender.getUUID(), payload.emotes());
+            ServerEmotePacksManager.setPlayerEmotePack(sender.getUUID(), payload.emotes());
 
             PacketDistributor.sendToAllPlayers(new EmotePackToClientPayload(sender.getUUID(), payload.emotes()));
         }).exceptionally(e -> {

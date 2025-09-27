@@ -14,7 +14,7 @@ public class PlayerJoinHandler {
     public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
         ServerPlayer player = (ServerPlayer) event.getEntity();
 
-        PacketDistributor.sendToPlayer(player, new AllPlayersEmotePacksPayload(ServerEmoteManager.getAllPlayerEmotePacks()));
+        PacketDistributor.sendToPlayer(player, new AllPlayersEmotePacksPayload(ServerEmotePacksManager.getAllPlayerEmotePacks()));
 
         PacketDistributor.sendToPlayer(player, new RequestEmotePackPayload());
     }
@@ -23,6 +23,6 @@ public class PlayerJoinHandler {
     public static void onPlayerExit(PlayerEvent.PlayerLoggedOutEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
-        ServerEmoteManager.removePlayerEmotePack(player.getUUID());
+        ServerEmotePacksManager.removePlayerEmotePack(player.getUUID());
     }
 }

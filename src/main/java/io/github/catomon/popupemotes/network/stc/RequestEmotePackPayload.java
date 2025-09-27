@@ -1,7 +1,7 @@
 package io.github.catomon.popupemotes.network.stc;
 
 import io.github.catomon.popupemotes.PopUpEmotes;
-import io.github.catomon.popupemotes.client.EmoteClientManager;
+import io.github.catomon.popupemotes.client.ClientEmotePacksManager;
 import io.github.catomon.popupemotes.network.cts.EmotePackUploadPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -13,7 +13,6 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public record RequestEmotePackPayload() implements CustomPacketPayload {
@@ -36,7 +35,7 @@ public record RequestEmotePackPayload() implements CustomPacketPayload {
             if (player == null) return;
 
             UUID playerUUID = player.getUUID();
-            var emotes = EmoteClientManager.getLocalEmotePack();
+            var emotes = ClientEmotePacksManager.getLocalEmotePack();
 
             if (emotes == null)
                 emotes = new HashMap<>();

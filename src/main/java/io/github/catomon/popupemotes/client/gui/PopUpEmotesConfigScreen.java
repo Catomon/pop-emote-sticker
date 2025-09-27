@@ -1,7 +1,7 @@
 package io.github.catomon.popupemotes.client.gui;
 
 import com.mojang.blaze3d.platform.NativeImage;
-import io.github.catomon.popupemotes.client.EmoteClientManager;
+import io.github.catomon.popupemotes.client.ClientEmotePacksManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -14,7 +14,6 @@ import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +28,7 @@ public class PopUpEmotesConfigScreen extends Screen {
     private float reloadTimeout = 0f;
 
     private void loadCustomEmoteTextures() {
-        Map<Integer, byte[]> emotePack = EmoteClientManager.getLocalEmotePack();
+        Map<Integer, byte[]> emotePack = ClientEmotePacksManager.getLocalEmotePack();
 
         if (emotePack == null) {
             emotePack = new HashMap<>();
@@ -62,7 +61,7 @@ public class PopUpEmotesConfigScreen extends Screen {
         boolean inGame = this.minecraft != null && this.minecraft.level != null;
 
         reloadButton = Button.builder(Component.translatable("pop_up_emotes.config.reload"), button -> {
-            EmoteClientManager.recreateCache();
+            ClientEmotePacksManager.recreateCache();
             loadCustomEmoteTextures();
             button.active = false;
             reloadTimeout = 20f;
@@ -74,7 +73,7 @@ public class PopUpEmotesConfigScreen extends Screen {
 
         Button openFolderButton = Button.builder(Component.translatable("pop_up_emotes.config.open_emotes_folder"), button -> {
             try {
-                File folder = EmoteClientManager.getEmotePackFolder().toFile();
+                File folder = ClientEmotePacksManager.getEmotePackFolder().toFile();
                 folder.mkdirs();
                 if (folder.exists()) {
                     if (Desktop.isDesktopSupported() && !GraphicsEnvironment.isHeadless()) {

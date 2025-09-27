@@ -3,7 +3,6 @@ package io.github.catomon.popupemotes.client;
 import io.github.catomon.popupemotes.PopUpEmotes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -20,7 +19,7 @@ import static io.github.catomon.popupemotes.Config.CUSTOM_PACK_FOLDER_NAME;
 /**
  * Client-side manager to cache emote packs for players.
  */
-public class EmoteClientManager {
+public class ClientEmotePacksManager {
     public static final ResourceLocation[] EMOTE_TEXTURES = new ResourceLocation[]{
             ResourceLocation.fromNamespaceAndPath(PopUpEmotes.MODID, "textures/emotes/emote1.png"),
             ResourceLocation.fromNamespaceAndPath(PopUpEmotes.MODID, "textures/emotes/emote2.png"),
