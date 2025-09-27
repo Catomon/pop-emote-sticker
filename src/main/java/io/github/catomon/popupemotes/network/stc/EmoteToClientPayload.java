@@ -1,19 +1,13 @@
 package io.github.catomon.popupemotes.network.stc;
 
-import io.github.catomon.popupemotes.Config;
 import io.github.catomon.popupemotes.PopUpEmotes;
-import io.github.catomon.popupemotes.client.EmoteLayerRenderer;
-import io.github.catomon.popupemotes.client.EmoteRenderer;
-import io.github.catomon.popupemotes.client.ModSounds;
-import net.minecraft.client.Minecraft;
+import io.github.catomon.popupemotes.network.ClientHandler;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundSource;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.UUID;
@@ -24,7 +18,6 @@ public record EmoteToClientPayload(int emoteId, UUID senderUUID) implements Cust
     public static final CustomPacketPayload.Type<EmoteToClientPayload> TYPE =
             new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(PopUpEmotes.MODID, "emote_to_client"));
 
-    // Define how to encode/decode the payload fields
     public static final StreamCodec<FriendlyByteBuf, EmoteToClientPayload> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.INT,
             EmoteToClientPayload::emoteId,
@@ -38,35 +31,17 @@ public record EmoteToClientPayload(int emoteId, UUID senderUUID) implements Cust
         return TYPE;
     }
 
-    // Handler method called on the appropriate thread (usually network thread)
     public static void handleOnNetwork(EmoteToClientPayload payload, IPayloadContext context) {
-        // Enqueue work on main thread
-        context.enqueueWork(() -> {
-            Minecraft mc = Minecraft.getInstance();
-            if (mc.level == null) return;
+        ClientHandler.handleOnNetwork(payload, context);
+    }
 
-            var player = mc.level.getPlayerByUUID(payload.senderUUID());
-            if (player != null) {
-                if (Config.useCompatRender) {
-                    EmoteLayerRenderer.showEmoteOnPlayer(player.getUUID(), payload.emoteId);
-                } else {
-                    EmoteRenderer.showEmoteOnPlayer(player.getUUID(), payload.emoteId);
-                }
-                mc.level.playLocalSound(
-                        player.getX(),
-                        player.getY() + player.getEyeHeight(),
-                        player.getZ(),
-                        ModSounds.EMOTE_SOUND.get(),
-                        SoundSource.PLAYERS,
-                        1.0F,
-                        1.0F,
-                        false
-                );
-            }
-        }).exceptionally(e -> {
-            // Optionally handle exceptions and disconnect if needed
-            context.disconnect(Component.translatable("pop_up_emotes.networking.failed", e.getMessage()));
-            return null;
-        });
+    @Override
+    public int emoteId() {
+        return emoteId;
+    }
+
+    @Override
+    public UUID senderUUID() {
+        return senderUUID;
     }
 }
