@@ -2,7 +2,7 @@ package io.github.catomon.popupemotes.network.cts;
 
 import io.github.catomon.popupemotes.network.NetworkHandler;
 import io.github.catomon.popupemotes.network.stc.EmotePackToClientPacket;
-import io.github.catomon.popupemotes.server.ServerEmoteManager;
+import io.github.catomon.popupemotes.server.ServerEmotePacksManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
@@ -53,7 +53,7 @@ public class EmotePackUploadPacket {
             ServerPlayer sender = context.getSender();
             if (sender == null) return;
             
-            ServerEmoteManager.setPlayerEmotePack(sender.getUUID(), packet.emotes);
+            ServerEmotePacksManager.setPlayerEmotePack(sender.getUUID(), packet.emotes);
 
             NetworkHandler.INSTANCE.send(
                 PacketDistributor.ALL.noArg(),

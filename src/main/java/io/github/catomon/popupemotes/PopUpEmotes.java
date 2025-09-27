@@ -1,7 +1,7 @@
 package io.github.catomon.popupemotes;
 
 import com.mojang.logging.LogUtils;
-import io.github.catomon.popupemotes.client.EmoteClientManager;
+import io.github.catomon.popupemotes.client.ClientEmotePacksManager;
 import io.github.catomon.popupemotes.client.ModSounds;
 import io.github.catomon.popupemotes.client.gui.PopUpEmotesConfigScreen;
 import io.github.catomon.popupemotes.network.NetworkHandler;
@@ -52,7 +52,7 @@ public class PopUpEmotes {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             try {
-                EmoteClientManager.getEmotePackFolder().toFile().mkdirs();
+                ClientEmotePacksManager.getEmotePackFolder().toFile().mkdirs();
             } catch (SecurityException e) {
                 e.printStackTrace();
             }

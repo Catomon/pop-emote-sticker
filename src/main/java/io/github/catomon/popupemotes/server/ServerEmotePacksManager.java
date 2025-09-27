@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ServerEmoteManager {
+public class ServerEmotePacksManager {
 
     // Thread-safe map of player UUID -> emote pack map (emoteId -> image bytes)
     private static final Map<UUID, Map<Integer, byte[]>> playerEmotePacks = new ConcurrentHashMap<>();

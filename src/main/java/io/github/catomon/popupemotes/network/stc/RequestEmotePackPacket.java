@@ -1,6 +1,6 @@
 package io.github.catomon.popupemotes.network.stc;
 
-import io.github.catomon.popupemotes.client.EmoteClientManager;
+import io.github.catomon.popupemotes.client.ClientEmotePacksManager;
 import io.github.catomon.popupemotes.network.NetworkHandler;
 import io.github.catomon.popupemotes.network.cts.EmotePackUploadPacket;
 import net.minecraft.client.Minecraft;
@@ -37,7 +37,7 @@ public class RequestEmotePackPacket {
             if (player == null) return;
 
             UUID playerUUID = player.getUUID();
-            Map<Integer, byte[]> emotes = EmoteClientManager.getLocalEmotePack();
+            Map<Integer, byte[]> emotes = ClientEmotePacksManager.getLocalEmotePack();
 
             if (emotes == null)
                 emotes = new HashMap<>();

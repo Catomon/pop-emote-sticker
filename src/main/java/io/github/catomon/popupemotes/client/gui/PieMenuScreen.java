@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Axis;
 import io.github.catomon.popupemotes.PopUpEmotes;
-import io.github.catomon.popupemotes.client.EmoteClientManager;
+import io.github.catomon.popupemotes.client.ClientEmotePacksManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -33,7 +33,7 @@ public class PieMenuScreen extends Screen {
     }
 
     private void loadDynamicTextures() {
-        Map<Integer, byte[]> localEmotes = EmoteClientManager.getLocalEmotePack();
+        Map<Integer, byte[]> localEmotes = ClientEmotePacksManager.getLocalEmotePack();
         if (localEmotes == null || localEmotes.isEmpty()) {
             return;
         }
@@ -142,9 +142,9 @@ public class PieMenuScreen extends Screen {
             if (textureLocation != null) {
                 RenderSystem.setShaderTexture(0, textureLocation);
                 guiGraphics.blit(textureLocation, -16, -16, 0, 0, 32, 32, 32, 32);
-            } else if (i < EmoteClientManager.EMOTE_TEXTURES.length) {
-                RenderSystem.setShaderTexture(0, EmoteClientManager.EMOTE_TEXTURES[i]);
-                guiGraphics.blit(EmoteClientManager.EMOTE_TEXTURES[i], -16, -16, 0, 0, 32, 32, 32, 32);
+            } else if (i < ClientEmotePacksManager.EMOTE_TEXTURES.length) {
+                RenderSystem.setShaderTexture(0, ClientEmotePacksManager.EMOTE_TEXTURES[i]);
+                guiGraphics.blit(ClientEmotePacksManager.EMOTE_TEXTURES[i], -16, -16, 0, 0, 32, 32, 32, 32);
             }
 
             guiGraphics.pose().popPose();

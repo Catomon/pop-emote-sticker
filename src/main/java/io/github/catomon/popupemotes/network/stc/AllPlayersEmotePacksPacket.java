@@ -1,6 +1,6 @@
 package io.github.catomon.popupemotes.network.stc;
 
-import io.github.catomon.popupemotes.client.EmoteClientManager;
+import io.github.catomon.popupemotes.client.ClientEmotePacksManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
@@ -62,7 +62,7 @@ public class AllPlayersEmotePacksPacket {
             UUID localUUID = Minecraft.getInstance().player != null ? Minecraft.getInstance().player.getUUID() : null;
             packet.playersEmotePacks.forEach((uuid, emotePack) -> {
                 if (!uuid.equals(localUUID)) {
-                    EmoteClientManager.cachePlayerEmotePack(uuid, emotePack);
+                    ClientEmotePacksManager.cachePlayerEmotePack(uuid, emotePack);
                 }
             });
         });

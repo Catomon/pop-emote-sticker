@@ -8,6 +8,8 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 public class Config {
 //    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
+    public static boolean useCompatRender = true;
+
     public static final String CUSTOM_PACK_FOLDER_NAME = "pop_emote_pack";
 
     @SubscribeEvent

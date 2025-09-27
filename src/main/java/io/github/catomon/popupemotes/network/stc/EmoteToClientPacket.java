@@ -1,5 +1,7 @@
 package io.github.catomon.popupemotes.network.stc;
 
+import io.github.catomon.popupemotes.Config;
+import io.github.catomon.popupemotes.client.EmoteLayerRenderer;
 import io.github.catomon.popupemotes.client.EmoteRenderer;
 import io.github.catomon.popupemotes.client.ModSounds;
 import net.minecraft.client.Minecraft;
@@ -45,7 +47,11 @@ public class EmoteToClientPacket {
 
             Player player = mc.level.getPlayerByUUID(msg.senderUUID);
             if (player != null) {
-                EmoteRenderer.showEmoteOnPlayer(player.getUUID(), msg.emoteId);
+                if (Config.useCompatRender) {
+                    EmoteLayerRenderer.showEmoteOnPlayer(player.getUUID(), msg.emoteId);
+                } else {
+                    EmoteRenderer.showEmoteOnPlayer(player.getUUID(), msg.emoteId);
+                }
                 mc.level.playLocalSound(
                         player.getX(),
                         player.getY() + player.getEyeHeight(),
