@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -131,16 +132,15 @@ public class EmoteLayerRenderer extends RenderLayer<AbstractClientPlayer, Player
 
         poseStack.pushPose();
 
-        poseStack.translate(0, -player.getBbHeight() + 0.5, 0);
-
-        float halfSize = BASE_SIZE / 2f;
-
         float cameraYaw = Minecraft.getInstance().getEntityRenderDispatcher().camera.getYRot();
         float cameraPitch = Minecraft.getInstance().getEntityRenderDispatcher().camera.getXRot();
 
-        poseStack.mulPose(Axis.YP.rotationDegrees(cameraYaw - player.yBodyRot));
-        poseStack.mulPose(Axis.XP.rotationDegrees(cameraPitch));
+        poseStack.translate(0, -player.getBbHeight() + 0.85, 0);
 
+        float interpolatedBodyYaw = Mth.lerp(partialTicks, player.yBodyRotO, player.yBodyRot);
+
+        poseStack.mulPose(Axis.YP.rotationDegrees(cameraYaw - interpolatedBodyYaw));
+        poseStack.mulPose(Axis.XP.rotationDegrees(cameraPitch));
         poseStack.scale(scale, scale, scale);
 
         RenderSystem.enableBlend();
@@ -150,6 +150,8 @@ public class EmoteLayerRenderer extends RenderLayer<AbstractClientPlayer, Player
         textureManager.bindForSetup(emoteResource);
 
         VertexConsumer vertexBuilder = bufferSource.getBuffer(RenderType.entityTranslucent(emoteResource));
+
+        float halfSize = BASE_SIZE / 2f;
 
         vertexBuilder.vertex(poseStack.last().pose(), -halfSize, halfSize, 0f)
                 .color(1f, 1f, 1f, alpha)
