@@ -17,7 +17,7 @@ class ClientModEventHandlers {
         if (!Config.useCompatRender) return;
 
         for (var skin : event.getSkins()) {
-            var renderer = event.getSkin(skin);
+            var renderer = event.getPlayerSkin(skin);
             System.out.println(renderer);
             if (renderer instanceof PlayerRenderer playerRenderer) {
                 playerRenderer.addLayer(new EmoteLayerRenderer(playerRenderer));

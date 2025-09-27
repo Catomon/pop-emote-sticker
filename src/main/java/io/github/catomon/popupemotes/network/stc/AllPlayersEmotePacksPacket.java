@@ -1,8 +1,9 @@
 package io.github.catomon.popupemotes.network.stc;
 
-import io.github.catomon.popupemotes.client.ClientEmotePacksManager;
-import net.minecraft.client.Minecraft;
+import io.github.catomon.popupemotes.network.ClientHandler;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.HashMap;
@@ -11,7 +12,7 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 public class AllPlayersEmotePacksPacket {
-    private final Map<UUID, Map<Integer, byte[]>> playersEmotePacks;
+    public final Map<UUID, Map<Integer, byte[]>> playersEmotePacks;
 
     public AllPlayersEmotePacksPacket(Map<UUID, Map<Integer, byte[]>> playersEmotePacks) {
         this.playersEmotePacks = playersEmotePacks;
@@ -51,22 +52,6 @@ public class AllPlayersEmotePacksPacket {
     }
 
     public static void handle(AllPlayersEmotePacksPacket packet, Supplier<NetworkEvent.Context> ctx) {
-        NetworkEvent.Context context = ctx.get();
-
-        if (!context.getDirection().getReceptionSide().isClient()) {
-            context.setPacketHandled(false);
-            return;
-        }
-
-        context.enqueueWork(() -> {
-            UUID localUUID = Minecraft.getInstance().player != null ? Minecraft.getInstance().player.getUUID() : null;
-            packet.playersEmotePacks.forEach((uuid, emotePack) -> {
-                if (!uuid.equals(localUUID)) {
-                    ClientEmotePacksManager.cachePlayerEmotePack(uuid, emotePack);
-                }
-            });
-        });
-
-        context.setPacketHandled(true);
+        ClientHandler.handle(packet, ctx);
     }
 }

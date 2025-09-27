@@ -1,8 +1,9 @@
 package io.github.catomon.popupemotes.network.stc;
 
-import io.github.catomon.popupemotes.client.ClientEmotePacksManager;
-import net.minecraft.client.Minecraft;
+import io.github.catomon.popupemotes.network.ClientHandler;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.HashMap;
@@ -11,8 +12,8 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 public class EmotePackToClientPacket {
-    private final UUID playerUUID;
-    private final Map<Integer, byte[]> emotes;
+    public final UUID playerUUID;
+    public final Map<Integer, byte[]> emotes;
 
     public EmotePackToClientPacket(UUID playerUUID, Map<Integer, byte[]> emotes) {
         this.playerUUID = playerUUID;
@@ -40,21 +41,6 @@ public class EmotePackToClientPacket {
     }
 
     public static void handle(EmotePackToClientPacket packet, Supplier<NetworkEvent.Context> ctx) {
-        NetworkEvent.Context context = ctx.get();
-
-        if (!context.getDirection().getReceptionSide().isClient()) {
-            context.setPacketHandled(false);
-            return;
-        }
-
-        context.enqueueWork(() -> {
-            if (Minecraft.getInstance().player != null)
-                if (Minecraft.getInstance().player.getUUID().equals(packet.playerUUID))
-                    return;
-
-            ClientEmotePacksManager.cachePlayerEmotePack(packet.playerUUID, packet.emotes);
-        });
-
-        context.setPacketHandled(true);
+        ClientHandler.handle(packet, ctx);
     }
 }
